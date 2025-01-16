@@ -34,7 +34,7 @@ const ProdutoForm = ({ produtoAtual, setProdutos }) => {
     try {
       await axios.post('http://localhost:8080/api/produtos', produto);
       setMensagem({ texto: 'Produto salvo com sucesso!', tipo: 'sucesso' });
-      setTimeout(() => setMensagem(''), 1500); // Limpar a mensagem após 1,5 segundos
+      setTimeout(() => setMensagem(''), 1500);
       setProdutos((prevProdutos) => [...prevProdutos, produto]);
     } catch (error) {
       console.error(error);

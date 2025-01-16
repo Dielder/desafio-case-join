@@ -121,18 +121,18 @@ h1 {
 }
 
 .mensagem {
-  position: fixed; /* Fixa a mensagem na tela */
-  top: 50%; /* Posiciona verticalmente no meio da tela */
-  left: 50%; /* Posiciona horizontalmente no meio da tela */
-  transform: translate(-50%, -50%); /* Ajusta para realmente centralizar */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 20px;
   margin-top: 10px;
   border-radius: 5px;
   font-size: 16px;
-  z-index: 9999; /* Garante que a mensagem apareça sobre outros elementos */
-  width: 80%; /* Largura da mensagem */
-  max-width: 400px; /* Largura máxima */
-  text-align: center; /* Centraliza o texto dentro da mensagem */
+  z-index: 9999;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
 }
 
 .mensagem.erro {

@@ -3,16 +3,16 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import ProdutoForm from './components/ProdutoForm';
 import ProdutoList from './components/ProdutoList';
 import EditarProduto from './components/EditarProduto';
-import ReactLoading from 'react-loading'; // Importando a biblioteca de carregamento
+import ReactLoading from 'react-loading';
 import './App.css';
 
 const App = () => {
   const [produtos, setProdutos] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [loading, setLoading] = useState(true);
 
   // Função para carregar produtos da API
   const loadProdutos = async () => {
-    setLoading(true); // Ativar carregamento
+    setLoading(true);
     try {
       const response = await fetch('http://localhost:8080/api/produtos');
       const data = await response.json();
@@ -20,7 +20,7 @@ const App = () => {
     } catch (error) {
       console.error('Erro ao carregar produtos:', error);
     }
-    setLoading(false); // Desativar carregamento
+    setLoading(false);
   };
 
   // Carregar produtos quando o componente for montado
@@ -33,7 +33,6 @@ const App = () => {
       <div className="container mt-5">
         <h1 className="text-center mb-4">Cadastro de Produtos</h1>
 
-        {/* Links de navegação */}
         <div className="mb-4">
           <Link to="/cadastrar" className="btn btn-primary mr-2">
             Cadastrar Produto

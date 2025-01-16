@@ -118,3 +118,13 @@ O frontend é uma interface simples que permite:
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
+
+## Imagens do Sistema
+
+Aqui estão linkadas as páginas principais do sistema, você pode verificar as outras imagens referente ao sistema na pasta `ìmagens`.
+
+![Página Inicial](imagens/Tela%20de%20Cadastro.png)
+![Lista de Produtos](imagens/Lista%20de%20Produtos%20Cadastrados.png)
+![Edição de Produtos](imagens/Tela%20de%20Edição%20de%20Produto.png)
+
+

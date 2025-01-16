@@ -32,7 +32,7 @@ public class ProdutoService {
     }
     
     public Optional<Produto> buscarPorNome(String nome) {
-        return produtoRepository.findByNome(nome);  // Supondo que exista o método no repositório
+        return produtoRepository.findByNome(nome);
     }
 
     // Verifica se já existe um produto com o mesmo nome, exceto o produto que está sendo atualizado

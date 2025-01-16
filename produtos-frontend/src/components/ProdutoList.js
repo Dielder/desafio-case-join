@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../App.css'; // Importando o arquivo CSS
+import '../App.css';
 
 const ListaProdutos = () => {
   const [produtos, setProdutos] = useState([]);
@@ -35,7 +35,7 @@ const ListaProdutos = () => {
 
   const showMessage = (text) => {
     setMensagem(text);
-    setTimeout(() => setMensagem(''), 1500); // Remove a mensagem após 1,5 segundos
+    setTimeout(() => setMensagem(''), 1500);
   };
 
   return (

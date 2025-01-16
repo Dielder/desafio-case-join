@@ -92,7 +92,7 @@ const EditarProduto = ({ setProdutos, produtos }) => {
               value={produto[campo]}
               onChange={handleChange}
               maxLength={campo === 'nome' ? 50 : campo === 'descricao' ? 100 : campo === 'preco' ? 8 : 5}
-              required={campo !== 'descricao'}  // Agora, 'descricao' não é mais obrigatório
+              required={campo !== 'descricao'}
             />
             <small className="text-muted">
               Máximo de {campo === 'nome' ? 50 : campo === 'descricao' ? 100 : campo === 'preco' ? 8 : 5} caracteres.
