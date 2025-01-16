@@ -30,5 +30,14 @@ public class ProdutoService {
     public void deletar(UUID id) {
         produtoRepository.deleteById(id);
     }
-}
+    
+    public Optional<Produto> buscarPorNome(String nome) {
+        return produtoRepository.findByNome(nome);  // Supondo que exista o método no repositório
+    }
 
+    // Verifica se já existe um produto com o mesmo nome, exceto o produto que está sendo atualizado
+    public boolean verificarDuplicado(String nome, UUID id) {
+        Optional<Produto> produtoExistente = produtoRepository.findByNome(nome);
+        return produtoExistente.isPresent() && !produtoExistente.get().getId().equals(id);
+    }
+}
