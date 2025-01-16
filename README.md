@@ -75,7 +75,8 @@ Este projeto utiliza o Swagger UI para gerar e exibir a documentação da API au
 - **Acessar o Swagger UI**: 
    - Abra no navegador: `http://localhost:8080/swagger-ui.html`
 
-- **OpenAPI JSON: Para acessar diretamente a especificação em formato JSON**: `http://localhost:8080/v3/api-docs`
+- **OpenAPI JSON**:
+    - Para acessar diretamente a especificação em formato JSON: `http://localhost:8080/v3/api-docs`
 
 A partir do Swagger UI, você pode explorar os endpoints, testar requisições e visualizar as definições da API.
 
