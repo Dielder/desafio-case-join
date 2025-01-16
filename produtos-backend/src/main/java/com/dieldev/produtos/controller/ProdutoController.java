@@ -2,7 +2,7 @@ package com.dieldev.produtos.controller;
 
 import com.dieldev.produtos.dto.ProdutoDTO;
 import com.dieldev.produtos.model.Produto;
-import com.dieldev.produtos.repository.ProdutoRepository;
+import com.dieldev.produtos.repositories.ProdutoRepository;
 import com.dieldev.produtos.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

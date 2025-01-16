@@ -1,23 +1,38 @@
 package com.dieldev.produtos.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Data
 public class ProdutoDTO {
 
-    private UUID id;
+	public ProdutoDTO(String nome, double preco, int quantidade, String descricao) {
+		this.nome = nome;
+		this.preco = preco;
+		this.quantidade = quantidade;
+		this.descricao = descricao;
+	}
 
-    @NotBlank(message = "O nome é obrigatório")
-    private String nome;
+	private UUID id;
 
-    @Positive(message = "O preço deve ser positivo")
-    private double preco;
+	@NotBlank(message = "O nome é obrigatório")
+	private String nome;
 
-    @PositiveOrZero(message = "A quantidade não pode ser negativa")
-    private int quantidade;
+	@Positive(message = "O preço deve ser positivo")
+	private double preco;
 
-    private String descricao;
+	@PositiveOrZero(message = "A quantidade não pode ser negativa")
+	private int quantidade;
+
+	private String descricao;
 }

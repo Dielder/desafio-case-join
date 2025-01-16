@@ -1,7 +1,8 @@
 package com.dieldev.produtos.service;
 
 import com.dieldev.produtos.model.Produto;
-import com.dieldev.produtos.repository.ProdutoRepository;
+import com.dieldev.produtos.repositories.ProdutoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

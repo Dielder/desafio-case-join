@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+import com.dieldev.produtos.dto.ProdutoDTO;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -16,18 +18,36 @@ import java.util.UUID;
 @Entity
 public class Produto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
 
-    @NotBlank(message = "O nome é obrigatório")
-    private String nome;
+	@NotBlank(message = "O nome é obrigatório")
+	private String nome;
 
-    @Positive(message = "O preço deve ser positivo")
-    private double preco;
+	@Positive(message = "O preço deve ser positivo")
+	private double preco;
 
-    @PositiveOrZero(message = "A quantidade não pode ser negativa")
-    private int quantidade;
+	@PositiveOrZero(message = "A quantidade não pode ser negativa")
+	private int quantidade;
 
-    private String descricao;
+	private String descricao;
+
+	public Produto(ProdutoDTO produtoDTO) {
+		this.nome = produtoDTO.getNome();
+		this.preco = produtoDTO.getPreco();
+		this.quantidade = produtoDTO.getQuantidade();
+		this.descricao = produtoDTO.getDescricao();
+	}
+
+	public Produto(@NotBlank(message = "O nome é obrigatório") String nome,
+			@Positive(message = "O preço deve ser positivo") double preco,
+			@PositiveOrZero(message = "A quantidade não pode ser negativa") int quantidade, String descricao) {
+		super();
+		this.nome = nome;
+		this.preco = preco;
+		this.quantidade = quantidade;
+		this.descricao = descricao;
+	}
+
 }

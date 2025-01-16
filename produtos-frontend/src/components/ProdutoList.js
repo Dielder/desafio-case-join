@@ -5,6 +5,8 @@ import '../App.css';
 
 const ListaProdutos = () => {
   const [produtos, setProdutos] = useState([]);
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const [produtosPorPagina] = useState(4);
   const [mensagem, setMensagem] = useState('');
   const navigate = useNavigate();
 
@@ -38,6 +40,24 @@ const ListaProdutos = () => {
     setTimeout(() => setMensagem(''), 1500);
   };
 
+  // Função para mudar de página
+  const nextPage = () => {
+    if ((paginaAtual * produtosPorPagina) < produtos.length) {
+      setPaginaAtual(paginaAtual + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (paginaAtual > 1) {
+      setPaginaAtual(paginaAtual - 1);
+    }
+  };
+
+  // Produtos a serem exibidos com base na página atual
+  const indexOfLastProduto = paginaAtual * produtosPorPagina;
+  const indexOfFirstProduto = indexOfLastProduto - produtosPorPagina;
+  const currentProdutos = produtos.slice(indexOfFirstProduto, indexOfLastProduto);
+
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Lista de Produtos</h2>
@@ -51,7 +71,7 @@ const ListaProdutos = () => {
       )}
 
       <div className="list-group">
-        {produtos.map(({ id, nome, descricao, preco, quantidade }) => (
+        {currentProdutos.map(({ id, nome, descricao, preco, quantidade }) => (
           <div
             key={id}
             className="list-group-item d-flex justify-content-between align-items-center border shadow-sm mb-2"
@@ -78,6 +98,20 @@ const ListaProdutos = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Paginação */}
+      <div className="d-flex justify-content-between mt-4">
+        <button className="btn btn-secondary" onClick={prevPage} disabled={paginaAtual === 1}>
+          Anterior
+        </button>
+        <button
+          className="btn btn-secondary"
+          onClick={nextPage}
+          disabled={paginaAtual * produtosPorPagina >= produtos.length}
+        >
+          Próxima
+        </button>
       </div>
     </div>
   );

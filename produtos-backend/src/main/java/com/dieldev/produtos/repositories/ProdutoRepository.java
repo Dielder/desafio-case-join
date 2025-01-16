@@ -1,4 +1,4 @@
-package com.dieldev.produtos.repository;
+package com.dieldev.produtos.repositories;
 
 import com.dieldev.produtos.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
