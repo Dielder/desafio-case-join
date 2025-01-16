@@ -2,8 +2,10 @@ package com.dieldev.produtos.controller;
 
 import com.dieldev.produtos.dto.ProdutoDTO;
 import com.dieldev.produtos.model.Produto;
+import com.dieldev.produtos.repository.ProdutoRepository;
 import com.dieldev.produtos.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,84 +19,89 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/produtos")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+	@Autowired
+	private ProdutoService produtoService;
 
-    @GetMapping
-    public ResponseEntity<List<ProdutoDTO>> listarProdutos() {
-        List<ProdutoDTO> produtos = produtoService.listarTodos().stream().map(this::toDTO).collect(Collectors.toList());
-        return ResponseEntity.ok(produtos);
-    }
+	@Autowired
+	private ProdutoRepository produtoRepository;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> buscarProduto(@PathVariable UUID id) {
-        return produtoService.buscarPorId(id).map(produto -> ResponseEntity.ok(toDTO(produto)))
-                .orElse(ResponseEntity.notFound().build());
-    }
+	@GetMapping
+	public ResponseEntity<List<ProdutoDTO>> listarProdutos() {
+		List<ProdutoDTO> produtos = produtoService.listarTodos().stream().map(this::toDTO).collect(Collectors.toList());
+		return ResponseEntity.ok(produtos);
+	}
 
-    @PostMapping
-    public ResponseEntity<ProdutoDTO> criarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
-        // Verifica se já existe um produto com o mesmo nome
-        if (produtoService.buscarPorNome(produtoDTO.getNome()).isPresent()) {
-            return ResponseEntity.badRequest().body(null);  // Retorna erro se o produto já existe
-        }
-        
-        Produto produto = toEntity(produtoDTO);
-        Produto salvo = produtoService.salvar(produto);
-        return ResponseEntity.ok(toDTO(salvo));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<ProdutoDTO> buscarProduto(@PathVariable UUID id) {
+		return produtoService.buscarPorId(id).map(produto -> ResponseEntity.ok(toDTO(produto)))
+				.orElse(ResponseEntity.notFound().build());
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> atualizarProduto(@PathVariable UUID id, @Valid @RequestBody ProdutoDTO produtoDTO) {
-        // Verifica se o produto com o id fornecido existe
-        Optional<Produto> produtoExistente = produtoService.buscarPorId(id);
-        
-        if (produtoExistente.isEmpty()) {
-            return ResponseEntity.notFound().build();  // Retorna 404 se o produto não for encontrado
-        }
+	@PostMapping
+	public ResponseEntity<ProdutoDTO> criarProduto(@Valid @RequestBody ProdutoDTO produtoDTO) {
+		// Verifica se já existe um produto com o mesmo nome
+		if (produtoService.buscarPorNome(produtoDTO.getNome()).isPresent()) {
+			return ResponseEntity.badRequest().body(null); // Retorna erro se o produto já existe
+		}
 
-        // Verifica se o nome do produto foi alterado e se já existe outro produto com esse nome
-        Optional<Produto> produtoComNomeExistente = produtoService.buscarPorNome(produtoDTO.getNome());
+		Produto produto = toEntity(produtoDTO);
+		Produto salvo = produtoService.salvar(produto);
+		return ResponseEntity.ok(toDTO(salvo));
+	}
 
-        // Se existir um produto com o mesmo nome e não for o mesmo produto sendo atualizado
-        if (produtoComNomeExistente.isPresent() && !produtoComNomeExistente.get().getId().equals(id)) {
-            return ResponseEntity.badRequest().body("Já existe um produto com esse nome.");
-        }
+	@PutMapping("/{id}")
+	public ResponseEntity<?> atualizarProduto(@PathVariable UUID id, @Valid @RequestBody ProdutoDTO produtoDTO) {
+		// Verifica se o produto existe
+		Optional<Produto> produtoExistente = produtoRepository.findById(id);
+		if (!produtoExistente.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+		}
 
-        // Atualiza o produto
-        Produto atualizado = toEntity(produtoDTO);
-        atualizado.setId(id);
-        return ResponseEntity.badRequest().body("Já existe um produto com esse nome.");
+		// Verifica se o nome do produto já existe para outro produto
+		Optional<Produto> produtoComMesmoNome = produtoRepository.findByNome(produtoDTO.getNome());
+		if (produtoComMesmoNome.isPresent() && !produtoComMesmoNome.get().getId().equals(id)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Já existe um produto com esse nome.");
+		}
 
-    }
+		// Atualiza os campos do produto
+		Produto produto = produtoExistente.get();
+		produto.setNome(produtoDTO.getNome());
+		produto.setDescricao(produtoDTO.getDescricao());
+		produto.setPreco(produtoDTO.getPreco());
+		produto.setQuantidade(produtoDTO.getQuantidade());
 
+		// Salva as alterações
+		Produto produtoAtualizado = produtoRepository.save(produto);
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarProduto(@PathVariable UUID id) {
-        if (produtoService.buscarPorId(id).isPresent()) {
-            produtoService.deletar(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
+		return ResponseEntity.ok(toDTO(produtoAtualizado));
+	}
 
-    // Métodos de conversão
-    private ProdutoDTO toDTO(Produto produto) {
-        ProdutoDTO dto = new ProdutoDTO();
-        dto.setId(produto.getId());
-        dto.setNome(produto.getNome());
-        dto.setPreco(produto.getPreco());
-        dto.setQuantidade(produto.getQuantidade());
-        dto.setDescricao(produto.getDescricao());
-        return dto;
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deletarProduto(@PathVariable UUID id) {
+		if (produtoService.buscarPorId(id).isPresent()) {
+			produtoService.deletar(id);
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
 
-    private Produto toEntity(ProdutoDTO dto) {
-        Produto produto = new Produto();
-        produto.setNome(dto.getNome());
-        produto.setPreco(dto.getPreco());
-        produto.setQuantidade(dto.getQuantidade());
-        produto.setDescricao(dto.getDescricao());
-        return produto;
-    }
+	// Métodos de conversão
+	private ProdutoDTO toDTO(Produto produto) {
+		ProdutoDTO dto = new ProdutoDTO();
+		dto.setId(produto.getId());
+		dto.setNome(produto.getNome());
+		dto.setPreco(produto.getPreco());
+		dto.setQuantidade(produto.getQuantidade());
+		dto.setDescricao(produto.getDescricao());
+		return dto;
+	}
+
+	private Produto toEntity(ProdutoDTO dto) {
+		Produto produto = new Produto();
+		produto.setNome(dto.getNome());
+		produto.setPreco(dto.getPreco());
+		produto.setQuantidade(dto.getQuantidade());
+		produto.setDescricao(dto.getDescricao());
+		return produto;
+	}
 }
