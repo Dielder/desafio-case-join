@@ -43,11 +43,16 @@ public class Produto {
 	public Produto(@NotBlank(message = "O nome é obrigatório") String nome,
 			@Positive(message = "O preço deve ser positivo") double preco,
 			@PositiveOrZero(message = "A quantidade não pode ser negativa") int quantidade, String descricao) {
-		super();
 		this.nome = nome;
 		this.preco = preco;
 		this.quantidade = quantidade;
 		this.descricao = descricao;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Produto{id=%s, nome='%s', preco=%.2f, quantidade=%d, descricao='%s'}", id, nome, preco,
+				quantidade, descricao);
 	}
 
 }
